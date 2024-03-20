@@ -80,11 +80,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-DATABASES['default']['OPTIONS']['charset'] = 'utf8mb4'
-del DATABASES['default']['OPTIONS']['sslmode'] 
-DATABASES['default']['OPTIONS']['ssl'] =  {'ca': os.environ.get('MYSQL_ATTR_SSL_CA')}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASES['default']['OPTIONS']['charset'] = 'utf8mb4'
+# del DATABASES['default']['OPTIONS']['sslmode'] 
+# DATABASES['default']['OPTIONS']['ssl'] =  {'ca': os.environ.get('MYSQL_ATTR_SSL_CA')}
 
 
 # Password validation
@@ -132,10 +132,8 @@ SESSION_TIMEOUT_REDIRECT = '/'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build')
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_ROOT  =   os.path.join(PROJECT_ROOT, 'staticfiles_build')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build')
 
 MEDIA_URL =  '/media/'
 
