@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Bill Invoice</title>
+
+<style>
+   /* google font */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap'); */
+  /* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Roboto+Condensed:wght@300;400;700&family=Sacramento&display=swap'); */
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Mr+Dafoe&family=Roboto+Condensed:wght@300;400;700&display=swap');
+
+body{
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 300;
+    /* width: 100%; */
+    background: rgb(19, 18, 18);
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+h2, h4, p {
+    margin: 0;
+}
+
+p{
+    font-weight: 400;
+}
+
+/* whole page */
+.page{
+    background: #fff;
+    display: block;
+    margin: 3rem auto 3rem auto;
+    position: relative;
+    box-shadow: 0 0 0.5cm rgb(0, 0, 0, 0.5);
+}
+.page[size='A4']{
+    width: 21cm;
+    /* height: 29.7cm; */
+    height: 24.7cm;
+    overflow: hidden;
+}
+
+/* top-section */
+.top-section{
+    color: #fff;
+    padding: 20px;
+    height: 115px;
+    /* background-color: #2e3f6d; */
+    background-color: #13C5DD;
+}
+/* #6a1b9a */
+
+.top-section h2{
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 400;
+}
+
+.top-section .contact,
+.top-section .address{
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.top-section .address-content{
+    max-width: 275px;
+}
+
+.contact .contact-content{
+    max-width: 300px;
+    float: right;
+    margin-top: 72px;
+}
+
+.contact-content .email,
+.contact-content .number{
+    display: block;
+    font-weight: 400;
+}
+
+.contact-content .email span,
+.contact-content .number span{
+    float: right;
+    margin-left: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+    /* body{
+        width: none;
+    } */
+    .page{
+        margin-top: 16px;
+    }
+    .page[size='A4']{
+        width: 9.6cm;
+        /* height: 29.7cm; */
+        height: 17cm;
+        overflow: hidden;
+    }
+
+    .top-section{
+        padding: 8px;
+        height: 55px;
+    }
+    .top-section h2{
+        font-size: 16px;
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+    .top-section p{
+        font-size: 12px;
+        margin-bottom: 2px;
+        font-weight: 300;
+    }
+    .top-section .address-content{
+        max-width: 200px;
+    }
+    .contact .contact-content{
+        max-width: 400px;
+        margin-top: 32px;
+    }
+    .contact .contact-content .email, 
+    .contact .contact-content .number{
+        font-size: 11px;
+    }
+    .contact .contact-content .email{
+        display: none;
+    }
+}
+
+/* billing-invoice */
+.billing-invoice{
+    padding: 20px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.billing-invoice .title{
+    font-weight: 400;
+    float: left;
+}
+
+.billing-invoice .desc{
+    font-weight: 400;
+    float: right;
+}
+
+.billing-invoice .code{
+    font-weight: 700;
+    float: right;
+}
+
+.billing-invoice .issue{
+    text-align: right;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+@media only screen and (max-width: 600px) {
+    .billing-invoice{
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+    .billing-invoice .code{
+        font-weight: 700;
+        float: right;
+        font-size: 16px;
+    }
+    .billing-invoice .issue{
+        text-align: right;
+        font-size: 14px;
+    }
+    
+}
+
+/* billed to */
+.billed-to{
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.billed-to .title{
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 28px;
+}
+
+.billed-to .billed-sec{
+    width: 50%;
+    float: left;
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.billed-to .name{
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.billed-to .ship-add{
+    max-width: 220px;
+    float: right;
+}
+
+.billed-to .billed-sec p{
+    font-weight: 400;
+    font-size: 15px;
+    margin-bottom: 9px;
+    color: rgb(56, 52, 52);
+}
+@media only screen and (max-width: 600px) {
+    .billed-to{
+    padding: 10px 20px;
+    margin-top: 5px;
+    }
+
+    .billed-to .title{
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .billed-to .billed-sec p{
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+    
+}
+
+/* invoice table */
+
+.table,
+.table2{
+    padding: 0 20px;
+    /* -pdf-keep-in-frame-mode: shrink; */
+}
+
+.table table,
+.table2 table{
+    width: 100%;
+}
+
+.table2 table, th,
+.table table, th,td{
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #616161;
+    border-collapse: collapse;
+}
+
+.table tr th{
+    font-size: 18px;
+    font-weight: 400;
+}
+.table tr td{
+    font-weight: 400;
+}
+
+.table table tr:first-child{
+    color: #fff;
+    background: #13C5DD;
+}
+
+.table tr th:nth-child(2),
+.table tr td:nth-child(2){
+    text-align: left;
+    width: 300px;
+}
+
+/* table2 */
+/* .td-k td{
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #616161;
+    border-collapse: collapse;
+} */
+
+@media only screen and (max-width: 600px) {
+    .table,
+    .table2{
+        padding: 0 20px;
+    }
+
+    .table table, th,td,
+    .table table, th,td{
+        padding: 3px;      
+    }
+
+    .table tr th,
+    .table tr td{
+        font-size: 13px;
+    }
+    .table2 tr th,
+    .table2 tr td{
+        font-size: 10px;
+    }
+}
+
+/* grand total */
+.grandtotal_wrap{
+    padding: 20px;
+    /* margin-top: 5px; */
+}
+
+.grandtotal_wrap .grandtotal_sec{
+    max-width: 300px;
+    float: right;
+}
+
+.grandtotal_sec .grand-total,
+.grandtotal_sec .sub-total{
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.grandtotal_sec .sub-total,
+.grandtotal_sec .all_tax{
+    margin-bottom: 10px;
+}
+
+.grandtotal_sec .grand-total{
+    background-color: #13C5DD;
+    color: #fff;
+    padding: 10px;
+}
+
+.grandtotal_sec .sub-total span,
+.grandtotal_sec .grand-total span,
+.grandtotal_sec .all_tax span{
+    margin-left: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+    .grandtotal_wrap{
+        padding: 10px 20px;
+    }
+
+    .grandtotal_sec .grand-total,
+    .grandtotal_sec .sub-total{
+        font-size: 12px;
+    }
+
+    .grandtotal_sec .sub-total,
+    .grandtotal_sec .all_tax{
+        margin-bottom: 4px;
+    }
+
+    .grandtotal_sec .grand-total{
+        padding: 3px 10px;
+    }
+
+    .grandtotal_sec .all_tax{
+        font-size: 12px;
+    }
+}
+
+/* bottom section */
+.bottom-section{
+    margin-top: 20px;
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.bottom-section .status-content .sign-nature{
+    font-size: 24px;
+    font-weight: 400;
+    font-family: 'Mr Dafoe';
+    margin-bottom: -10px;
+}
+.sig-line{
+    width: 140px;
+    float: left;
+}
+
+@media only screen and (max-width: 600px) {
+    .bottom-section .status-content .sign-nature{
+        font-size: 18px;
+    }
+    .status{
+        font-size: 15px;
+    }
+    .sig-line{
+        width: 100px;
+    }
+}
+
+
+</style>
+</head>
+<body>
+    <div class="page" size="A4">
+        <!-- Top Section -->
+        <div class="top-section">
+            <div class="address">
+                <div class="address-content">
+                    <h2>CLeveland Medical Center</h2>
+                    <p>Cleveland Medical Center, London United Kingdom</p>
+                </div>
+            </div>
+            <div class="contact">
+                <div class="contact-content">
+                    <div class="email">Email: <span>contant@clevelandmedcenter.com</span></div>
+                    <div class="number">Phone UK: <span>+44-330-808-4390</span></div>
+                    <div class="number">Phone US: <span>+1-412-376-828</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Info -->
+        <div class="billing-invoice">
+            <div class="title">
+                Billing Invoice
+            </div>
+            <div class="desc">
+                <p class="code">#{{billing.billing_receipt}}</p>
+                <p class="issue">Issued: {{billing.billing_date}}<span></span></p>
+            </div>
+        </div>
+        
+
+        <!-- billed to -->
+        <div class="billed-to">
+            <hr>
+            <div class="title">Billed To: <strong>{{billing.patient.full_name}}</strong></div>
+            <div class="billed-sec">
+                <!-- <div class="name">Jeniffer Doe</div> -->
+                <p><strong>Patient ID:</strong> #{{billing.patient.patient_id}}</p>
+                <p><strong>Email:</strong> {{billing.patient.customer.email}}</p>
+                <p><strong>Phone:</strong> {{billing.patient.phone_number}}</p>
+                <p><strong>Address:</strong> {{billing.patient.address|slice:':29'}} <br>{{billing.patient.address|slice:'30:'}} </p>
+            </div>
+
+            <div class="billed-sec">
+                <div class="ship-add">
+                    <p><strong>Bill Date:</strong> {{billing.billing_date}}</p>
+                    <p><strong>Birth Date:</strong> {{billing.patient.date_of_birth}}</p>
+                    <p><strong>Gender:</strong> {{billing.patient.gender}}</p>
+                    <p><strong>Doctor:</strong> {{billing.patient.doctor}}</p>
+                </div>   
+            </div>
+        </div>
+        <!-- first table -->
+        <div class="table2" style="margin-bottom: 10px;">
+            <table>
+                <tr class="td-k">
+                    <td>Admission Date:</td>
+                    <td style="background: #d6d1d1;">{{billing.billing_date}}</td>
+                    <td>Package Name:</td>
+                    <td style="background: #d6d1d1;">Gast Testing</td>
+                    <td>Total Days</td>
+                    <td style="background: #d6d1d1;">{{billing.days_spent}}</td>
+                </tr>
+                <tr>
+                    <td>Discharge Date:</td>
+                    <td style="background: #d6d1d1;">{{billing.patient.discharge_date}}</td>
+                    <td>Insurance Name:</td>
+                    <td style="background: #d6d1d1;">Feeding</td>
+                    <td>Policy No.</td>
+                    <td style="background: #d6d1d1;"></td>
+                </tr>
+            </table>
+        </div>
+
+
+
+        <!-- invoice table -->
+        <div class="table">
+            <table>
+                <tr>
+                    <th>SL</th>
+                    <th>Service Name</th>
+                    <th>QTY</th>
+                    <th>Value</th>
+                    <th>Total</th>
+                    <!-- <th>Total</th> -->
+                    <!-- <th></th> -->
+                </tr>
+            {% for item in bill_items %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{item.billing_specification}}</td>
+                    <td>{{item.bill_qty}}</td>
+                    <td>${{item.bill_value}}</td>
+                    <td>${{item.get_single_total}}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+
+        <!-- grand total -->
+        <div class="grandtotal_wrap">
+            <div class="grandtotal_sec">
+                <div class="sub-total">
+                    SUB TOTAL: <span>${{billing.bill_amount}}</span>
+                </div>
+                <div class="all_tax">Tax Vat 18%:<span>$200</span> </div>
+                <div class="all_tax">Insurance:<span>-$700</span> </div>
+                <div class="all_tax">Already Paid:<span>${{billing.paid_amount}}</span> </div>
+                <div class="grand-total">Grand Total <span>${{billing.get_balance}}</span></div>
+            </div>
+        </div>
+
+        <!-- bottom section -->
+        <div class="bottom-section">
+            <div class="status-content">
+                <p class="sign-nature">{{billing.patient.doctor.get_signature}}</p>
+                <hr class="sig-line"><br>
+                <p class="status">Signature</p>
+                <!-- <p><span></span></p> -->
+            </div>
+        </div>
+        
+    </div>
+    
+</body>
+</html>

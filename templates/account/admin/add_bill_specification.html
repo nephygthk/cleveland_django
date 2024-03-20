@@ -1,0 +1,88 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-4">
+        <div class="card bg-dark shadow rounded card-sm">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{error}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <h3 class="card-title mb-5 bg-secondary text-center text-light">Add Bill Specification</h3>
+                
+                <form action="{% url 'account:add_billing_specification' %}" method="POST">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <p class="text-white fw-bold">Please correct the following errors:</p>
+                        {% for field in form %}
+                            {% if field.errors %}
+                            <div class="alert alert-primary" role="alert">
+                                {{ field.label }}: {{ field.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="{{ form.doc_name.id_for_label}}" class="form-label fw-bold text-white">Specification Name</label>
+                                {{ form.spec_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Create Now" class="btn btn-primary text-white w-100 fw-bold float-end">                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row pt-5">
+    <div class="table-responsive">
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                  <!-- <th scope="col">#</th> -->
+                  <th scope="col">Specification Name</th>
+                  <th scope="col">Date Created</th>
+                  <!-- <th scope="col"></th> -->
+                </tr>
+            </thead>
+        
+            <tbody class="table-dark border-0">
+            {% for spec in bill_specs %}
+                <tr>
+                  <!-- <th scope="row">1</th> -->
+                  <td>{{spec.spec_name}}</td>
+                  <td>{{spec.created}}</td>
+                  <!-- <td><a href="{% url 'account:delete_billing_specification' spec.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td> -->
+                </tr>
+            {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+<!-- <td><a href="{% url 'account:delete_doctor' doctor.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td> -->
