@@ -14,9 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-by3tir8q)#99kb0f1ncq^p^fizao53y_1%7lb7geu&dbgywd2g'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG') == "True"
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', ".vercel.app", ".now.sh"]
 
@@ -81,10 +81,10 @@ DATABASES = {
     }
 }
 # DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-DATABASES['default'] = dj_database_url.parse('mysql://u981967018_clevhospital:d-0Mih@jRYfE@srv1264.hstgr.io/u981967018_clevhospital',conn_max_age=600, ssl_require=True)
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 DATABASES['default']['OPTIONS']['charset'] = 'utf8mb4'
 del DATABASES['default']['OPTIONS']['sslmode'] 
-DATABASES['default']['OPTIONS']['ssl'] =  {'ca': '/etc/ssl/cert.pem'}
+DATABASES['default']['OPTIONS']['ssl'] =  {'ca': os.environ.get('MYSQL_ATTR_SSL_CA')}
 
 
 # Password validation
