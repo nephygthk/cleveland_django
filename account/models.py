@@ -171,7 +171,7 @@ class Payment(models.Model):
     billing = models.ForeignKey(Billing, related_name='payment', on_delete=models.CASCADE, null=True, blank=True)
     patient = models.ForeignKey(Patient, related_name='payment', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    receipt = models.FileField(upload_to='payement_receipts', null=True, blank=True)
+    receipt = models.FileField(upload_to='payement_receipts', default='default.png')
     payment_summary = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)

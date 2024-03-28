@@ -23,7 +23,10 @@ class Home(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs)
-        context['address'] = Address.objects.get(is_default=True)
+        try:
+            context['address'] = Address.objects.get(is_default=True)
+        except Address.DoesNotExist:
+            pass
         return context
     
 
