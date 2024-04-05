@@ -1,0 +1,36 @@
+{% extends '../sub_base.html' %}
+{% load static %}
+
+
+{% block sub_base_content %}
+<style>
+    #up-msg{
+        display: none;
+    }
+</style>
+<!-- <h2 class="mb-4 text-primary">Add a Patient</h2> -->
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-9">
+        <div class="card bg-dark shadow rounded card-sm">
+            <div class="card-body">
+                <h3 class="card-title mb-5 bg-secondary text-center text-light">Upload Image for {{patient.full_name}}</h3>
+
+                <!-- <div id="up-msg" class="alert alert-success alert-dismissible fade show" role="alert">
+                    
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div> -->
+
+                <form id="my-form" action="." method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {{form.as_p}}
+                    <input type="submit" value="Upload" class="btn btn-primary text-white w-100 fw-bold float-end">                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

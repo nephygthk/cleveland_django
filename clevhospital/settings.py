@@ -9,6 +9,11 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# importing cloudinary
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -32,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # external
+    'cloudinary',
     'django.contrib.humanize',
     
     # my own apps
@@ -134,10 +140,16 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
-MEDIA_URL =  '/media/'
+# MEDIA_URL =  '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+#cloudinary api config
+cloudinary.config( 
+  	cloud_name = os.environ.get('CLOUD_NAME'),
+  	api_key = os.environ.get('API_KEY'),
+  	api_secret = os.environ.get('API_SECRET')
+)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

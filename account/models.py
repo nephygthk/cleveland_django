@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 from .managers import CustomAccountManager
 from decimal import Decimal
+from cloudinary.models import CloudinaryField
 
 from .utils import compress
 
@@ -67,7 +68,8 @@ class Patient(models.Model):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     admission_date = models.DateField()
     discharge_date = models.DateField(null=True, blank=True)
-    picture = models.FileField(upload_to='patient_pictures', default='default-img.jpg')
+    picture = CloudinaryField('image')
+    # picture = models.FileField(upload_to='patient_pictures', default='default-img.jpg')
     pass_text = models.CharField(max_length=130, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

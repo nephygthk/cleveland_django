@@ -29,6 +29,7 @@ urlpatterns = [
     path('payment_list/', views.PaymentListView.as_view(), name='payment_list'),
     path('add_prescription/', views.PrescriptionView.as_view(), name='add_prescription'),
     path('<pk>/upload_image/', views.upload_image, name='upload_image'),
+    path('<pk>/upload_image_c/', views.upload_image_cloudnary, name='upload_image_cloudnary'),
     path('<pk>/change_patient_password/', views.change_patient_password, name='change_patient_password'),
     
 

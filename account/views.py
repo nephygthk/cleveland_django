@@ -13,7 +13,7 @@ from decimal import Decimal
 from .models import (Address, Apointment, Billing, BillingItem, BillingSpecification,
             Customer, Doctor, Patient, Payment, Prescription)
 from .forms import (AddDoctorForm, AddressForm, BillSpecificationForm,
-            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PaymentForm, PrescriptionForm, RegistrationForm, PatientForm, EditPatientForm)
+            BillingForm, BillingItemFormSet, CustomerUpdateForm, EditBillingItemFormSet, PaymentForm, PrescriptionForm, RegistrationForm, PatientForm, EditPatientForm, UploadImageForm)
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -345,6 +345,19 @@ def delete_payment(request, pk):
     messages.success(request, 'payment deleted successfully')
     return redirect('account:payment_list')
 
+
+def upload_image_cloudnary(request, pk):
+    patient = get_object_or_404(Patient, pk=pk)
+    form = UploadImageForm(request.POST or None, request.FILES or None, instance=patient)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Image uploaded successfully')
+        return redirect('account:all_patient')
+
+    context = {'form':form}
+    return render(request, 'account/admin/upload_image_cloudnary.html', context)
+
+
 from .utils import compress, drastic_compress, small_compress
 
 @login_required
@@ -352,16 +365,16 @@ def upload_image(request, pk):
     patient = get_object_or_404(Patient, pk=pk)
     if request.method == "POST":
         image = request.FILES.get('image')
-        print(image.size)
+        # print(image.size)
         if image.size > 300000:
-            print("it's greater than 300")
+            # print("it's greater than 300")
             try:
                 final_image = drastic_compress(image)
             except OSError:
                 pass
 
         elif image.size > 169000 and image.size < 300000:
-            print("it's greater than 169")
+            # print("it's greater than 169")
             try:
                 final_image = compress(image)
             except OSError:
