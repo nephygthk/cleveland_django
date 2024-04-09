@@ -68,7 +68,7 @@ class Patient(models.Model):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     admission_date = models.DateField()
     discharge_date = models.DateField(null=True, blank=True)
-    picture = CloudinaryField('image')
+    picture = CloudinaryField('image', null=True, default=None, blank=True)
     # picture = models.FileField(upload_to='patient_pictures', default='default-img.jpg')
     pass_text = models.CharField(max_length=130, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
