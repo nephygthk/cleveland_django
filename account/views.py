@@ -409,7 +409,7 @@ def add_and_view_addresses(request):
         return redirect('account:address')
 
     context = {'form':address_form, 'addresses':addresses}
-    return render(request, 'account/admin/addresses.html', context)
+    return render(request, 'account2/admin/list_addresses.html', context)
 
 
 def default_address(request, pk):
@@ -421,7 +421,7 @@ def default_address(request, pk):
 def delete_address(request, pk):
     address = Address.objects.get(id=pk)
     if address.is_default == True:
-        messages.error(request, "This address can't be delected because it is currently selected. deselect to delete")
+        messages.error(request, "This address can't be deleted because it is currently selected. deselect to delete")
     else:
         address.delete()
         messages.success(request, 'Address deleted successfully')

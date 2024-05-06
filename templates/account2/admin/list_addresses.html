@@ -4,9 +4,9 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card card-form-bg">
-            <h4 class="text-center">Add new Prescription</h4>
+            <h4 class="text-center">Add new address</h4>
             {% include '../../frontend/include/alert.html' %}
 
             {% if form.errors %}
@@ -21,13 +21,13 @@
             {% endif %}
             
             <div class="card-body">
-                <form action="." method="POST" id="add-presc-form">
+                <form action="." method="POST" id="address-form">
                     {% csrf_token %}
 
                     {{form.as_p}}
-                    <button type="submit" class="btn btn-primary" id="add-presc-btn">
-                        <span id="add-presc-btn-text">Submit</span>
-                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="add-presc-spinner">
+                    <button type="submit" class="btn btn-primary" id="address-btn">
+                        <span id="address-btn-text">Submit</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="address-spinner">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </button>
@@ -35,40 +35,42 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
         <div class="card">
             <div class="card-body">
-                <h4 class="text-center">Prescription List</h4>
+                <h4 class="text-center">Address List</h4>
                 
                 <div class="table-responsive">
                     <table class="table table-custom">
                         <thead>
                           <tr>
-                            <th scope="col">Patient Name</th>
-                            <th scope="col">Cashier</th>
-                            <th scope="col">Hospital</th>
-                            <th scope="col">Created On</th>
-                            <!-- <th scope="col"></th> -->
+                            <th scope="col">Address</th>
+                            <th scope="col">City</th>
+                            <th scope="col">Country</th>
+                            <th scope="col">Status</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                           </tr>
                         </thead>
                         
                         <tbody>
-                            {% if not prescriptions %}
+                            {% if not addresses %}
                             <tr>
                                 <td>
-                                    <p class="text-center">No doctor List To display, please add a new doctor</p>
+                                    <p class="text-center">No address List To display, please add a new address</p>
                                 </td>
                             </tr>
                             
                             {% else %}
-                                {% for list in prescriptions %}
+                                {% for list in addresses %}
                                     <tr>
-                                        <td>{{list.patient}}</td>
-                                        <td>{{list.cash_manager}}</td>
-                                        <td>{{list.hospital}}</td>
-                                        <td>{{list.created}}</td>
+                                        <td>{{list.address_name}}</td>
+                                        <td>{{list.city}}</td>
+                                        <td>{{list.country}}</td>
+                                        <td>{% if list.is_default%}Selected{% else %}None{% endif%}</td>
 
-                                        
+                                        <td>{% if not list.is_default%}<a href="{% url 'account:address_default' list.id %}" class="btn btn-info btn-sm fw-bold btn-custom"> Make Default</a>{% endif%}</td>
+                                        <td><a href="{% url 'account:delete_address' list.id %}" class="btn btn-danger btn-sm fw-bold btn-custom"> Delete</a></td>  
                                    
                                 {% endfor %}
                             {% endif %}
@@ -82,10 +84,10 @@
 
 
 <script>
-    const registerForm = document.querySelector('#add-presc-form');
-    const registerSpinner = document.querySelector('#add-presc-spinner');
-    const registerBtnText = document.querySelector('#add-presc-btn-text');
-    const registerButton = document.querySelector('#add-presc-btn');
+    const registerForm = document.querySelector('#address-form');
+    const registerSpinner = document.querySelector('#address-spinner');
+    const registerBtnText = document.querySelector('#address-btn-text');
+    const registerButton = document.querySelector('#address-btn');
 
     registerForm.addEventListener('submit', function(e){
         e.preventDefault();
@@ -101,6 +103,6 @@
 
 {% endblock %}
 
-<!-- <td>
-    <a href="{% url 'account:delete_doctor' list.id %}" class="btn btn-danger btn-custom">Delete</a>
-</td> -->
+
+
+                                        
