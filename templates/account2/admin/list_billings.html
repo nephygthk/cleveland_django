@@ -1,0 +1,67 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-12">
+        <a href="{% url 'account:add_billing' %}" class="btn btn-primary w-100 mb-4 fw-bold">Add New Bill</a>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center">Billing List</h4>
+                {% include '../../frontend/include/alert.html' %}
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                          <tr>
+                            <th scope="col">Patient</th>
+                            <th scope="col">Bill Amount</th>
+                            <th scope="col">Paid Amount</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Bill Date</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% if not billings %}
+                            <tr>
+                                <td>
+                                    <p class="text-center">No billing List To display, please add a new bill</p>
+                                </td>
+                            </tr>
+                            
+                            {% else %}
+                                {% for list in billings %}
+                                    <tr>
+                                        <td>{{list.patient}}</td>
+                                        <td>{{list.currency}}{{list.bill_amount}}</td>
+                                        <td>{{list.currency}}{{list.paid_amount}}</td>
+                                        <td>{{list.currency}}{{list.get_balance}}</td>
+                                        <td>{{list.billing_date}}</td>
+
+                                        <td><a href="{% url 'account:billing_detail' list.id %}" class="btn btn-info fw-bold btn-sm btn-custom">Detail</a></td>
+                                        <td><a href="{% url 'account:edit_billing' list.id %}"><i class="fa-solid fa-pen"></i></a></td>
+                                        <td><a href="{% url 'account:delete_billing' list.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
+                                        
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+<td><a href="{% url 'account:detail_billing' list.id %}" class="btn btn-info fw-bold btn-sm btn-custom">Detail</a></td>
+<td><a href="{% url 'account:edit_billing' list.id %}"><i class="fa-solid fa-pen"></i></a></td>
+<td><a href="{% url 'account:delete_billing' list.id %}"><i class="fa-sharp fa-solid fa-trash text-danger"></i></a></td>
+<td><a href="{% url 'account:show_receipt' list.id %}"><i class="fa-solid fa-download text-info"></i></a></td>

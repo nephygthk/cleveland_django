@@ -1,0 +1,102 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-form-bg">
+            <h4 class="text-center">Add new Specification</h4>
+            {% include '../../frontend/include/alert.html' %}
+
+            {% if form.errors %}
+                <p class="text-white fw-bold">Please correct the following errors:</p>
+                {% for field in form %}
+                    {% if field.errors %}
+                    <div class="alert alert-primary" role="alert">
+                        {{ field.label }}: {{ field.errors|striptags }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <div class="card-body">
+                <form action="." method="POST" id="add-spec-form">
+                    {% csrf_token %}
+
+                    {{form.as_p}}
+                    <button type="submit" class="btn btn-primary" id="add-spec-btn">
+                        <span id="add-spec-btn-text">Submit</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="add-spec-spinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center">Bill Specification List</h4>
+                
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                          <tr>
+                            <th scope="col">Spec Name</th>
+                            <th scope="col">Createn On</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% if not bill_specs %}
+                            <tr>
+                                <td>
+                                    <p class="text-center">No available bill specification to list</p>
+                                </td>
+                            </tr>
+                            
+                            {% else %}
+                                {% for list in bill_specs %}
+                                    <tr>
+                                        <td>{{list.spec_name}}</td>
+                                        <td>{{list.created}}</td>
+                                        <td>
+                                            <a href="{% url 'account:delete_billing_specification' list.id %}" class="btn btn-danger btn-custom">Delete</a>
+                                        </td>
+                                    
+                                        
+                                   
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const registerForm = document.querySelector('#add-spec-form');
+    const registerSpinner = document.querySelector('#add-spec-spinner');
+    const registerBtnText = document.querySelector('#add-spec-btn-text');
+    const registerButton = document.querySelector('#add-spec-btn');
+
+    registerForm.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        registerSpinner.classList.remove('d-none');
+        registerButton.style.background = '#493b99';
+        registerBtnText.textContent = 'Processing';
+        registerButton.disabled = true;
+
+        this.submit();
+    });
+</script>
+
+{% endblock %}
+
+

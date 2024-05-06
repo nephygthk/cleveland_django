@@ -1,0 +1,212 @@
+/* *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
+a{
+    text-decoration: none;
+}
+
+.wrapper {
+    display: flex;
+}
+
+#sidebar {
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    background: #002f64;
+    color: #fff;
+    transition: all 0.3s;
+    overflow-y: auto;
+    z-index: 999;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    padding: 15px 35px;
+}
+
+#closeSidebar{
+    background: transparent; 
+    color: #fff; 
+    font-size: 29px; 
+    border: none;
+    outline: none;
+    display: none;
+}
+
+#closeSidebar:focus{
+    border: none;
+    outline: none;
+}
+
+#sidebarCollapse{
+    background: transparent; 
+    color: black; 
+    font-size: 22px; 
+    border: none;
+    outline: none;
+}
+
+#sidebarCollapse:focus{
+    border: none;
+    outline: none;
+}
+
+#content {
+    width: 100%;
+    padding-left: 250px;
+    transition: padding-left 0.3s;
+}
+
+#content.active {
+    padding-left: 0;
+}
+
+.list-unstyled {
+    padding: 15px 30px;
+    list-style: none;
+    margin-top: 30px;
+}
+
+.list-unstyled li{
+    margin-bottom: 20px;
+    font-size: 17px;
+}
+
+.list-unstyled li a{
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.3;
+}
+
+.list-unstyled li a:hover{
+    color: #c0b7b7;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+@media (max-width: 700px) {
+    #sidebar {
+        display: none;
+        height: 70vh;
+    }
+    #content {
+        padding-left: 0;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #content.active {
+        padding-left: 0;
+    }
+    #closeSidebar{
+        display: block;
+    }
+}
+
+
+/* table css */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    /* border-radius: 10px; */
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-custom th,
+.table-custom td {
+    padding: 7px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+}
+
+.table-custom th {
+    background-color: #161758;
+    color: #fff;
+    font-weight: bold;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.btn-custom {
+    /* background-color: #007bff; */
+    color: #fff;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    padding: 1px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+}
+
+.btn-custom:hover {
+    background-color: #022a55;
+    color: #fff;
+}
+
+
+
+/* form */
+.card-form-bg{
+    background: #064cb4;
+    color: #fff;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-control {
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #3306af;
+    box-shadow: none;
+    /* box-shadow: 0 0 0 0.2rem rgba(0, 17, 255, 0.25); */
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+button.btn-primary {
+    position: relative;
+    width: 100%;
+    margin-top: 20px;
+    background-color: #12055c;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+button.btn-primary:hover {
+    background-color: #080614;
+}
+
+.show_password{
+    margin-top: 48px;
+}
+
+@media(max-width: 750px){
+    .show_password{
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+}

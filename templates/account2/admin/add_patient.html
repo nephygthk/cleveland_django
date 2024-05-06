@@ -1,0 +1,192 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-9">
+        <div class="card card-form-bg">
+            <div class="card-body">
+                <h4 class="text-center mb-4">Add New Patient</h4>
+                {% include '../../frontend/include/alert.html' %}
+
+                {% if registration_form.errors %}
+                    <p class="text-white fw-bold">Please correct the following errors:</p>
+                    {% for field in form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% if patient_form.errors %}
+                    <p class="text-white fw-bold">Please correct the following errors:</p>
+                    {% for field in patient_form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <hr>
+                <form action="." method="POST" id="register-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ registration_form.email.id_for_label}}" class="form-label">Email</label>
+                                {{registration_form.email}}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ registration_form.password.id_for_label}}" class="form-label">Password</label>
+                                {{registration_form.password}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ registration_form.password2.id_for_label}}" class="form-label">Repeat Password</label>
+                                {{registration_form.password2}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check show_password">
+                                <input class="form-check-input" type="checkbox" value="" id="showPasswordButton">
+                                <label class="form-check-label" for="showPasswordButton">
+                                  Show Password
+                                </label>
+                            </div>
+                        </div>
+                        
+                    </div>
+             
+                    <div class="row"> 
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.full_name.id_for_label }}" class="form-label">Full Name</label>
+                                {{ patient_form.full_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.full_name.id_for_label }}" class="form-label">Patient ID</label>
+                                {{ patient_form.patient_id}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.patient_id.id_for_label }}" class="form-label">Patient Address</label>
+                                {{ patient_form.address}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.gender.id_for_label }}" class="form-label">Gender</label>
+                                {{ patient_form.gender }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.blood_group.id_for_label }}" class="form-label">Blood Group</label>
+                                {{ patient_form.blood_group }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.date_of_birth.id_for_label }}" class="form-label">Date of birth</label>
+                                {{ patient_form.date_of_birth}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ patient_form.phone_number.id_for_label }}" class="form-label fw-bold text-white">Phone Number</label>
+                                {{ patient_form.phone_number}}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row"> 
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{patient_form.admission_date.id_for_label}}" class="form-label">Admission Date</label>
+                                {{patient_form.admission_date}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="{{ patient_form.discharge_date.id_for_label }}" class="form-label fw-bold text-white">Discharge Date</label>
+                                {{ patient_form.discharge_date}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{patient_form.doctor.id_for_label}}" class="form-label">Doctor</label>
+                                {{patient_form.doctor}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{patient_form.picture.id_for_label}}" class="form-label">Patient Photo</label>
+                                {{patient_form.picture}}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="register-btn">
+                        <span id="submit-btn-text">Submit</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="spinner-register">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // used for showing password
+    const passwordOne = document.getElementById('id_password');
+    const passwordTwo = document.getElementById('id_password2');
+    const showPasswordCheckbox = document.getElementById('showPasswordButton');
+
+    showPasswordCheckbox.addEventListener('change', function() {
+        if (showPasswordCheckbox.checked) {
+            passwordOne.type = 'text';
+            passwordTwo.type = 'text';
+        } else {
+            passwordOne.type = 'password';
+            passwordTwo.type = 'password';
+        }
+    });
+
+</script>
+
+<script>
+    const registerForm = document.querySelector('#register-form');
+    const registerSpinner = document.querySelector('#spinner-register');
+    const registerBtnText = document.querySelector('#submit-btn-text');
+    const registerButton = document.querySelector('#register-btn');
+
+    registerForm.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        registerSpinner.classList.remove('d-none');
+        registerButton.style.background = '#493b99';
+        registerBtnText.textContent = 'Processing';
+        registerButton.disabled = true;
+
+        this.submit();
+    });
+</script>
+
+{% endblock %}

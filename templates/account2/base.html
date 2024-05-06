@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cleveland Hospital - The best in the world</title>
+
+  <!-- boostrap cdn -->
+  <link rel="stylesheet" href="{% static 'account2/css/bootstrap.min.css' %}">
+
+  <!-- fontawesome cdn -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <!-- custom style -->
+  <link rel="stylesheet" href="{% static 'account2/css/styles.css' %}">
+
+  <!-- favicon  -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
+  <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}">
+
+</head>
+<body class="all-content">
+  
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-header" >
+                <h4>C--<span class="text-info">M</span>--C</h4>
+                <button id="closeSidebar">&times;</button>
+            </div>
+            <hr class="bg-light">
+            {% include './include/sidebar.html' %}
+        </nav>
+        <div id="content">
+
+            <!--side bar toggle menu -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                <button type="button" id="sidebarCollapse">
+                    <i class="fas fa-bars"></i>
+                </button>
+                </div>
+            </nav>
+            
+            <div class="container-fluid bg-light pt-5 pb-3">
+                {% block content %}{% endblock %}
+            </div>
+            
+        </div>
+        
+    </div>
+  
+  <script src="{% static 'account2/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'account2/js/scripts.js' %}"></script>
+</body>
+</html>

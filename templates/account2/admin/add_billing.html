@@ -1,0 +1,155 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+<style>
+    .hidden{
+        display: none;
+    }
+</style>
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-10">
+        <div class="card card-form-bg">
+            <div class="card-body">
+                <h4 class="text-center mb-4">Add New Billing</h4>
+                {% include '../../frontend/include/alert.html' %}
+
+                {% if billing_form.errors %}
+                    <p class="text-white fw-bold">Please correct the following errors:</p>
+                    {% for field in billing_form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if billing_item_form.errors %}
+                    <p class="text-white fw-bold">Please correct the following errors:</p>
+                    {% for field in billing_item_form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <hr>
+                <form action="." method="POST" id="add-billing-form">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.patient.id_for_label}}" class="form-label fw-bold text-white">Patient Name</label>
+                                {{ billing_form.patient }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.paid_amount.id_for_label}}" class="form-label fw-bold text-white">Paid Amount</label>
+                                {{ billing_form.paid_amount }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.billing_date.id_for_label}}" class="form-label fw-bold text-white">Billing Date</label>
+                                {{ billing_form.billing_date }}
+                            </div>
+                        </div> 
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.report_summary.id_for_label}}" class="form-label fw-bold text-white">Report Summary <span class="text-white small">
+                                    (Optional)</span></label>
+                                {{ billing_form.report_summary }}
+                            </div>
+                        </div>             
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.days_spent.id_for_label}}" class="form-label fw-bold text-white">Days Spent</label>
+                                {{ billing_form.days_spent }}
+                            </div>
+                        </div>             
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="{{ billing_form.currency.id_for_label}}" class="form-label fw-bold text-white">Currency</label>
+                                {{ billing_form.currency }}
+                            </div>
+                        </div>             
+                    </div>
+                    <hr class="bg-white">
+                    <h3 class="text-center py-1 bg-primary text-white">Services Rendered</h3>
+                    {{ bill_item_form.management_form }}
+                    <div id="bill-item-form-list">
+                        {% for form in bill_item_form %}
+                            <div class="bill-item-form ">                     
+                                {{bill_item_form}}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div id="empty-form" class="hidden">{{bill_item_form.empty_form}}</div>
+                    <button type="button" id="add-more" class="my-3">Add service <i class="fa-solid fa-plus"></i></button>
+
+                    <button type="submit" class="btn btn-primary" id="add-billing-btn">
+                        <span id="add-billing-btn-text">Submit</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="add-billing-spinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>                 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- adding spinner on click for form submition -->
+<script>
+    const registerForm = document.querySelector('#add-billing-form');
+    const registerSpinner = document.querySelector('#add-billing-spinner');
+    const registerBtnText = document.querySelector('#add-billing-btn-text');
+    const registerButton = document.querySelector('#add-billing-btn');
+
+    registerForm.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        registerSpinner.classList.remove('d-none');
+        registerButton.style.background = '#493b99';
+        registerBtnText.textContent = 'Processing';
+        registerButton.disabled = true;
+
+        this.submit();
+    });
+</script>
+
+<script>
+
+    const addMoreBtn = document.getElementById('add-more')
+    const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+    
+
+
+    addMoreBtn.addEventListener('click', add_new_form)
+    function add_new_form(event){
+        if(event){
+            event.preventDefault()
+        }
+        const currentBillItemForms = document.getElementsByClassName('bill-item-form')
+        const currentFormCount = currentBillItemForms.length //+ 1
+        const formCopyTarget = document.getElementById('bill-item-form-list')
+        const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
+        copyEmptyFormEl.setAttribute('class', 'bill-item-form')
+        copyEmptyFormEl.setAttribute('id', `form-${currentFormCount}`)
+        const regex = new RegExp('__prefix__', 'g')
+        copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currentFormCount)
+        totalNewForms.setAttribute('value', currentFormCount + 1)
+        // adding a new form element to my html form
+        formCopyTarget.append(copyEmptyFormEl)
+    }
+</script>
+
+{% endblock %}

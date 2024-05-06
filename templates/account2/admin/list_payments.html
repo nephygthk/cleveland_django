@@ -1,0 +1,54 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center">Payment List</h4>
+                {% include '../../frontend/include/alert.html' %}
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                          <tr>
+                            <<th scope="col">Patient Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">View Receipt</th>
+                            <th scope="col">Payment Summary</th>
+                            <th scope="col">Date Paid</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% if not prescriptions %}
+                            <tr>
+                                <td>
+                                    <p class="text-center">No payment List available To display</p>
+                                </td>
+                            </tr>
+                            
+                            {% else %}
+                                {% for list in prescriptions %}
+                                    <tr>
+                                        <td>{{list.patient.full_name}}</td>
+                                        <td>{{list.billing.currency}}{{list.amount}}</td>
+                                        <td><a href="{{list.receipt.url}}"><img src="{{list.receipt.url}}" class="img-fluid" style="width: 100px; height: 30px;"></a></td>
+                                        <td>{{list.payment_summary|slice:":40"}}......</td>
+                                        <td>{{list.date_created}}</td>
+                                        <td><a href="{% url 'account:delete_payment' list.id %}"><i class="fa-sharp fa-solid fa-trash text-danger btn-custom"></i></a></td>     
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

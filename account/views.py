@@ -20,7 +20,7 @@ def login_user(request):
         if request.user.is_staff:
             return redirect('account:admin_dashboard')
         else:
-            return redirect('account:patient_status')
+            return redirect('account:patient_dashboard')
         
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -37,11 +37,12 @@ def login_user(request):
                 return redirect('account:patient_dashboard')
             
         else:
-            messages.info(request, 'Username OR password is incorrect')
+            messages.info(request, 'Username or password is incorrect')
             return redirect('account:login')
     return render(request, 'account/login.html', {})
 
 
+@login_required
 def logout_user(request):
     logout(request)
     return redirect('account:login')
@@ -50,7 +51,7 @@ def logout_user(request):
 class AddPatientView(LoginRequiredMixin, TemplateView):
     model = Customer
     form_class = RegistrationForm
-    template_name = 'account/registration/register.html'
+    template_name = 'account2/admin/add_patient.html'
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_staff:
@@ -75,7 +76,7 @@ class AddPatientView(LoginRequiredMixin, TemplateView):
                     )
 
             return HttpResponseRedirect(
-                reverse_lazy('account:all_patient')
+                reverse_lazy('account:admin_dashboard')
             )
         
         return self.render_to_response(
@@ -119,8 +120,8 @@ def UpdatePatientView(request, pk):
         patient_form.save()
         return redirect('account:admin_dashboard')
 
-    context = {'form':customer_form, 'form2':patient_form }
-    return render(request, "account/admin/update_patient.html", context )
+    context = {'form':customer_form, 'patient_form':patient_form }
+    return render(request, "account2/admin/edit_patient.html", context )
 
 
 @login_required
@@ -133,32 +134,28 @@ def delete_patient_account(request, pk):
 
 @login_required
 def change_patient_password(request, pk):
+    customer = Customer.objects.get(pk=pk)
+    patient = Patient.objects.get(customer=customer)
     if request.method == 'POST':
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-        print(password1)
+
         if password1 != password2:
             messages.error(request, 'The password and the repeat password does not match, please try again')
-            return redirect('account:admin_dashboard', pk=pk)
+            return redirect('account:change_patient_password', pk=pk)
         else:
-            customer = Customer.objects.get(pk=pk)
-            patient = Patient.objects.get(customer=customer)
-            print(patient.pass_text)
-            print(password1)
-
-
             patient.pass_text = password1
             patient.save()
             customer.set_password(password1)
             customer.save()   
         return redirect('account:admin_dashboard')
-    
-    return render(request, 'account/admin/change_customer_passward.html')
+    context = {'patient':patient}
+    return render(request, 'account2/admin/change_customer_passward.html',context)
 
 
 class AdminDashboardView(LoginRequiredMixin, ListView):
     model = Customer
-    template_name = 'account/admin/dashboard.html'
+    template_name = 'account2/admin/dashboard.html'
     context_object_name = 'customers'
     paginate_by = 20
 
@@ -167,11 +164,16 @@ class AdminDashboardView(LoginRequiredMixin, ListView):
             return HttpResponse("Error handler content", status=400)
         return super().dispatch(request, *args, **kwargs)	
     
+    def get_queryset(self):
+        # Get the base queryset
+        queryset = super().get_queryset().filter(is_staff=False)
+        return queryset
+    
 
 class AddAndViewDoctorView(LoginRequiredMixin, CreateView):
     form_class = AddDoctorForm
     success_url = reverse_lazy('account:add_doctor')
-    template_name = 'account/admin/add_dcotor.html'
+    template_name = 'account2/admin/list_doctors.html'
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_staff:
@@ -218,6 +220,7 @@ def add_new_billing(request):
                 # print(type(price))
                 parent.bill_amount = sum(Decimal(price)  for price in prices)
                 parent.save()
+                messages.success(request, 'Bill is created successfully')
                 return redirect('account:all_billings')
         except ValueError:
             messages.success(request, 'A bill for this patient already exist')
@@ -226,7 +229,7 @@ def add_new_billing(request):
         form = BillingForm()
         formset = BillingItemFormSet()
     context = {'billing_form':form, 'bill_item_form':formset }
-    return render(request, 'account/admin/add_billing.html', context )
+    return render(request, 'account2/admin/add_billing.html', context )
 
 
 @login_required
@@ -252,7 +255,7 @@ def edit_billing(request, pk):
         return redirect('account:all_billings')
 
     context = {'billing_form':form, 'bill_item_form':formset}
-    return render(request, "account/admin/edit_billing.html", context)
+    return render(request, "account2/admin/edit_billing.html", context)
 
 
 @login_required
@@ -261,12 +264,12 @@ def BillingDetailsView(request, pk):
     bill_items = BillingItem.objects.filter(billing=billing_detail)
 
     context = {'bill':billing_detail, 'bill_items':bill_items}
-    return render(request, "account/admin/billing_detail.html", context)
+    return render(request, "account2/admin/list_billing_detail.html", context)
 
 
 class AllBillingsView(LoginRequiredMixin, ListView):
     model = Billing
-    template_name = 'account/admin/billings.html'
+    template_name = 'account2/admin/list_billings.html'
     context_object_name = 'billings'
     paginate_by = 20
 
@@ -286,7 +289,7 @@ def delete_billing(request, pk):
 class AddBillSpecificationView(LoginRequiredMixin, CreateView):
     model = BillingSpecification
     form_class = BillSpecificationForm
-    template_name = "account/admin/add_bill_specification.html"
+    template_name = "account2/admin/list_bill_spec.html"
     success_url = reverse_lazy('account:add_billing_specification')
 
     def get_context_data(self, **kwargs):
@@ -305,7 +308,7 @@ def delete_billing_specification(request, pk):
 
 class PaymentListView(LoginRequiredMixin, ListView):
     model = Payment
-    template_name = 'account/admin/payment.html'
+    template_name = 'account2/admin/list_payments.html'
     context_object_name = 'payments'
     # paginate_by = 20
 
@@ -315,10 +318,18 @@ class PaymentListView(LoginRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)	
     
 
+@login_required
+def delete_payment(request, pk):
+    payment = get_object_or_404(Payment, id=pk)
+    payment.delete()
+    messages.success(request, 'payment deleted successfully')
+    return redirect('account:payment_list')
+
+
 class PrescriptionView(LoginRequiredMixin, CreateView):
     form_class = PrescriptionForm
     success_url = reverse_lazy('account:add_prescription')
-    template_name = 'account/admin/add_prescription.html'
+    template_name = 'account2/admin/list_prescriptions.html'
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_staff:
@@ -339,13 +350,6 @@ class PrescriptionView(LoginRequiredMixin, CreateView):
     
 
 @login_required
-def delete_payment(request, pk):
-    payment = get_object_or_404(Payment, id=pk)
-    payment.delete()
-    messages.success(request, 'payment deleted successfully')
-    return redirect('account:payment_list')
-
-
 def upload_image_cloudnary(request, pk):
     patient = get_object_or_404(Patient, pk=pk)
     form = UploadImageForm(request.POST or None, request.FILES or None, instance=patient)

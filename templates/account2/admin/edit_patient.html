@@ -1,0 +1,157 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-9">
+        <div class="card card-form-bg">
+            <div class="card-body">
+                <h4 class="text-center mb-4">Update Patient information</h4>
+                {% include '../../frontend/include/alert.html' %}
+
+                {% if form.errors %}
+                    <p class="text-white fw-bold">Please correct the following errors:</p>
+                    {% for field in form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% if patient_form.errors %}
+                    <p class="text-white fw-bold">Please correct the following errors:</p>
+                    {% for field in patient_form %}
+                        {% if field.errors %}
+                        <div class="alert alert-primary" role="alert">
+                            {{ field.label }}: {{ field.errors|striptags }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <hr>
+                <form action="." method="POST" id="update-register-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+             
+                    <div class="row"> 
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{ form.email.id_for_label}}" class="form-label">Email</label>
+                                {{form.email}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.full_name.id_for_label }}" class="form-label">Full Name</label>
+                                {{ patient_form.full_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.full_name.id_for_label }}" class="form-label">Patient ID</label>
+                                {{ patient_form.patient_id}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.gender.id_for_label }}" class="form-label">Gender</label>
+                                {{ patient_form.gender }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.blood_group.id_for_label }}" class="form-label">Blood Group</label>
+                                {{ patient_form.blood_group }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.date_of_birth.id_for_label }}" class="form-label">Date of birth</label>
+                                {{ patient_form.date_of_birth}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{patient_form.admission_date.id_for_label}}" class="form-label">Admission Date</label>
+                                {{patient_form.admission_date}}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row"> 
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{patient_form.discharge_date.id_for_label}}" class="form-label">Discharged Date</label>
+                                {{patient_form.discharge_date}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{patient_form.doctor.id_for_label}}" class="form-label">Doctor</label>
+                                {{patient_form.doctor}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="{{patient_form.picture.id_for_label}}" class="form-label">Patient Photo</label>
+                                {{patient_form.picture}}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.phone_number.id_for_label }}" class="form-label">Phone Number</label>
+                                {{ patient_form.phone_number}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="{{ patient_form.address.id_for_label }}" class="form-label">Patient Address</label>
+                                {{ patient_form.address}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="{{ patient_form.pass_text.id_for_label }}" class="form-label">Password Text</label>
+                            <div class="form-group mb-3">
+                                {{ patient_form.pass_text}}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="update-register-btn">
+                        <span id="update-submit-btn-text">Submit</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="update-spinner-register">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const registerForm = document.querySelector('#update-register-form');
+    const registerSpinner = document.querySelector('#update-spinner-register');
+    const registerBtnText = document.querySelector('#update-submit-btn-text');
+    const registerButton = document.querySelector('#update-register-btn');
+
+    registerForm.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        registerSpinner.classList.remove('d-none');
+        registerButton.style.background = '#493b99';
+        registerBtnText.textContent = 'Processing';
+        registerButton.disabled = true;
+
+        this.submit();
+    });
+</script>
+
+{% endblock %}

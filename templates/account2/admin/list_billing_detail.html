@@ -1,0 +1,118 @@
+{% extends '../base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+
+  .p_img{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+
+  .table-dark{
+    background-color: #022a55 !important;
+  }
+  .bg-primary{
+    background-color: #022a55 !important;
+  }
+
+</style>
+
+
+<div class="row">
+    <h3 class="card-title mb-5 bg-primary text-center text-light">{{bill.patient.full_name|title}} Bill Details</h3>
+    <hr class="bg-dark">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row align-item-center justify-content-between">
+                    <div class="col-md-6">
+                        <img src="{{bill.patient.picture.url}}" class="img-fluid p_img">
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                              <div class="ms-2 me-auto">
+                                <div class="fw-bold">Patient Name:</div>
+                              </div>
+                              <span>{{bill.patient.full_name}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                              <div class="ms-2 me-auto">
+                                <div class="fw-bold">Doctor Name:</div>
+                              </div>
+                              <span>{{bill.patient.doctor.doc_name}}</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                <div class="ms-2 me-auto">
+                                  <div class="fw-bold">Bill Amount:</div>
+                                </div>
+                                <span>{{bill.currency}}{{bill.bill_amount}}</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                <div class="ms-2 me-auto">
+                                  <div class="fw-bold">Paid Amount:</div>
+                                </div>
+                                <span>{{bill.currency}}{{bill.paid_amount}}</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                <div class="ms-2 me-auto">
+                                  <div class="fw-bold">Balance:</div>
+                                </div>
+                                <span>{{bill.currency}}{{bill.get_balance}}</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                                <div class="ms-2 me-auto">
+                                  <div class="fw-bold">No of Days:</div>
+                                </div>
+                                <span>{{bill.days_spent}}</span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow mt-3">
+            <div class="card-body">
+                <h5>Invoice Summary</h5>
+                <hr class="bg-dark">
+                <p>{{bill.report_summary}}</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="table-responsive">
+            <table class="table table-secondary table-hover ">
+                <thead>
+                    <tr>
+                      <th scope="col">Specification</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Price</th>
+                    </tr>
+                </thead>
+            
+                <tbody class="border-0 table-dark" >
+                    {% for billing in bill_items %}
+                    <tr>
+                      <td>{{billing.billing_specification}}</td>               
+                      <td>{{billing.bill_qty}}</td>
+                      <td>{{billing.billing.currency}}{{billing.bill_value}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

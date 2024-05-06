@@ -1,0 +1,104 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-form-bg">
+            <h4 class="text-center">Add new doctor</h4>
+            {% include '../../frontend/include/alert.html' %}
+
+            {% if form.errors %}
+                <p class="text-white fw-bold">Please correct the following errors:</p>
+                {% for field in form %}
+                    {% if field.errors %}
+                    <div class="alert alert-primary" role="alert">
+                        {{ field.label }}: {{ field.errors|striptags }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            <div class="card-body">
+                <form action="." method="POST" id="add-doctor-form">
+                    {% csrf_token %}
+
+                    {{form.as_p}}
+                    <button type="submit" class="btn btn-primary" id="add-doctor-btn">
+                        <span id="add-doctor-btn-text">Submit</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="add-doctor-spinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center">Doctor List</h4>
+                
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                          <tr>
+                            <th scope="col">Doctor Name</th>
+                            <th scope="col">Doctor Email</th>
+                            <th scope="col">Job title</th>
+                            <th scope="col">Created On</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% if not doctors %}
+                            <tr>
+                                <td>
+                                    <p class="text-center">No doctor List To display, please add a new doctor</p>
+                                </td>
+                            </tr>
+                            
+                            {% else %}
+                                {% for list in doctors %}
+                                    <tr>
+                                        <td>{{list.doc_name}}</td>
+                                        <td>{{list.doc_email}}</td>
+                                        <td>{{list.job_title}}</td>
+                                        <td>{{list.created}}</td>
+
+                                        <td>
+                                            <a href="{% url 'account:delete_doctor' list.id %}" class="btn btn-danger btn-custom">Delete</a>
+                                        </td>
+                                   
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const registerForm = document.querySelector('#add-doctor-form');
+    const registerSpinner = document.querySelector('#add-doctor-spinner');
+    const registerBtnText = document.querySelector('#add-doctor-btn-text');
+    const registerButton = document.querySelector('#add-doctor-btn');
+
+    registerForm.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        registerSpinner.classList.remove('d-none');
+        registerButton.style.background = '#493b99';
+        registerBtnText.textContent = 'Processing';
+        registerButton.disabled = true;
+
+        this.submit();
+    });
+</script>
+
+{% endblock %}

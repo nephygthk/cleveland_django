@@ -1,0 +1,31 @@
+<ul class="list-unstyled components">
+    {% if request.user.is_staff %}
+    <li>
+    <a href="{% url 'account:admin_dashboard' %}">Dashboard</a>
+    </li>
+    <li>
+        <a href="{% url 'account:add_patient' %}">Add Patient</a>
+    </li>
+    <li>
+        <a href="{% url 'account:add_doctor' %}">Doctors</a>
+    </li>
+    <li>
+        <a href="{% url 'account:add_billing_specification' %}">Billing Specifications</a>
+    </li>
+    <li>
+        <a href="{% url 'account:all_billings' %}">Billings</a>
+    </li>
+    <li>
+        <a href="{% url 'account:payment_list' %}">Payments</a>
+    </li>
+    <li>
+        <a href="{% url 'account:add_prescription' %}">Prescriptions</a>
+    </li>
+    
+    
+    {% else %}
+    
+    {% endif %}
+    <hr>
+    <a href="{% url 'account:logout' %}" class="btn btn-danger fw-bold w-100">Sign out <i class="fa-solid fa-right-from-bracket ms-4"></i></a>
+</ul>

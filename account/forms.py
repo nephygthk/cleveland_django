@@ -45,8 +45,14 @@ class EditPatientForm(forms.ModelForm):
         self.fields['admission_date'].widget = DateInput()
         self.fields['discharge_date'].widget = DateInput()
 
+        readonly_fields = ['pass_text',]
+
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+        for field_name in readonly_fields:
+            if field_name in self.fields:
+                self.fields[field_name].widget.attrs['readonly'] = True
 
 
 class RegistrationForm(forms.ModelForm):
