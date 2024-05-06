@@ -18,7 +18,7 @@ class Home(TemplateView):
             if request.user.is_staff:
                 return HttpResponseRedirect(reverse_lazy('account:admin_dashboard'))
             else:
-                return HttpResponseRedirect(reverse_lazy('account:patient_dashboard'))
+                return HttpResponseRedirect(reverse_lazy('account:patient_status'))
         return super().dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
@@ -39,7 +39,7 @@ class Contact(TemplateView):
             if request.user.is_staff:
                 return HttpResponseRedirect(reverse_lazy('account:admin_dashboard'))
             else:
-                return HttpResponseRedirect(reverse_lazy('account:patient_dashboard'))
+                return HttpResponseRedirect(reverse_lazy('account:patient_status'))
         return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):

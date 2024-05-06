@@ -1,0 +1,60 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-5">
+        <div class="card card-form-bg shadow rounded card-sm">
+            <div class="card-body">
+                {% include '../../frontend/include/alert.html' %}
+                <h5 class="card-title mb-5 text-center text-light">Contact Us</h5>
+                
+                <form action="." method="POST" id="contact-form">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold text-white">Full Name</label>
+                        <input name="name" type="text" class="form-control" id="name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-bold text-white">Your Email address</label>
+                        <input name="email" type="email" class="form-control" id="email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label fw-bold text-white">Message</label>
+                        <textarea class="form-control" id="message" rows="3" required></textarea>
+                    </div>
+ 
+                    <button type="submit" class="btn btn-primary" id="contact-btn">
+                        <span id="contact-btn-text">Send</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="contact-spinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const registerForm = document.querySelector('#contact-form');
+    const registerSpinner = document.querySelector('#contact-spinner');
+    const registerBtnText = document.querySelector('#contact-btn-text');
+    const registerButton = document.querySelector('#contact-btn');
+
+    registerForm.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        registerSpinner.classList.remove('d-none');
+        registerButton.style.background = '#493b99';
+        registerBtnText.textContent = 'Processing';
+        registerButton.disabled = true;
+
+        this.submit();
+    });
+</script>
+{% endblock %}

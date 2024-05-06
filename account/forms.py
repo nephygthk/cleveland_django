@@ -169,6 +169,9 @@ class PrescriptionForm(forms.ModelForm):
 
 
 class PaymentForm(forms.ModelForm):
+    payment_summary = forms.CharField(
+        label='Receipt Summary', widget=forms.Textarea(attrs={'rows':3, 'cols':15}),)
+    
     class Meta:
         model = Payment
         fields = '__all__'

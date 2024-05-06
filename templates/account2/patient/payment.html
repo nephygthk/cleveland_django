@@ -1,0 +1,120 @@
+{% extends '../base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="row align-items-center justify-content-center">
+    <div class="col-md-5">
+        <div class="card card-form-bg shadow rounded card-sm">
+            {% if form.errors %}
+                <p class="text-white fw-bold">Please correct the following errors:</p>
+                {% for field in form %}
+                    {% if field.errors %}
+                    <div class="alert alert-primary" role="alert">
+                        {{ field.label }}: {{ field.errors|striptags }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% include '../../frontend/include/alert.html' %}
+            <div class="card-body">
+                <h5 class="card-title mb-5 text-center text-light">Upload Payment Receipt</h5>
+                
+                <form action="." method="POST" enctype="multipart/form-data" id="add-payment-form">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="{{form.amount.id_for_label}}" class="form-label fw-bold text-white">Amount Paid:</label>
+                            {{form.amount}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{form.receipt.id_for_label}}" class="form-label fw-bold text-white">Upload Payment Receipt:</label>
+                            {{form.receipt}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{form.payment_summary.id_for_label}}" class="form-label fw-bold text-white">Receipt Summary:</label>
+                            {{form.payment_summary}}
+                        </div>
+                    </div>
+                  
+                    <button type="submit" class="btn btn-primary" id="add-payment-btn">
+                        <span id="add-payment-btn-text">Submit</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="add-payment-spinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-custom">
+                    <thead class="table-info">
+                      <tr>
+                        <th scope="col">Patient ID</th>
+                        <th scope="col">Patient Name</th>
+                        <th scope="col">Doctor Name</th>
+                        <th scope="col">Total Bill</th>
+                        <th scope="col">Total Paid</th>
+                        <th scope="col">Balance To Be Paid</th>
+                        <th scope="col">Admitted On</th>
+                        <th scope="col">Payment Date</th>
+                        <th scope="col">View Receipt</th>
+                      </tr>
+                      <hr>
+                    </thead>
+                    <tbody>
+                        
+                {% if payments %}
+                    {% for list in payments %}
+                      <tr>
+                        <td>{{list.patient.patient_id}}</td>
+                        <td>{{list.patient.full_name}}</td>
+                        <td>{{list.patient.doctor}}</td>
+                        <td>{{list.billing.bill_amount}}</td>
+                        <td>{{list.billing.paid_amount}}</td>
+                        <td>{{list.billing.get_balance}}</td>
+                        <td>{{list.patient.admission_date}}</td>
+                        <td>{{list.date_created}}</td>
+                        <td><a href="{{list.receipt.url}}" class="btn btn-info btn-sm fw-bold w-100 btn-custom"><i class="fa-solid fa-download text-white"></i></a></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-center">There are no available payment data to display</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const registerForm = document.querySelector('#add-payment-form');
+    const registerSpinner = document.querySelector('#add-payment-spinner');
+    const registerBtnText = document.querySelector('#add-payment-btn-text');
+    const registerButton = document.querySelector('#add-payment-btn');
+
+    registerForm.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        registerSpinner.classList.remove('d-none');
+        registerButton.style.background = '#493b99';
+        registerBtnText.textContent = 'Processing';
+        registerButton.disabled = true;
+
+        this.submit();
+    });
+</script>
+
+{% endblock %}

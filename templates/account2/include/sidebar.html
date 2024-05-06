@@ -27,8 +27,25 @@
     
     
     {% else %}
+    <li>
+        <a href="{% url 'account:patient_status' %}">Status</a>
+    </li>
+    <li>
+        <a href="{% url 'account:patient_dashboard' %}">Appointment</a>
+    </li>
+    <li class="active">
+        <a href="{% url 'account:patient_billing' %}">Billing</a>
+    </li>
+    <li>
+        <a href="{% url 'account:make_payment' %}">Make Payment</a>
+    </li>
+    <li class="active">
+        <a href="{% url 'account:contact' %}">Contact Us</a>
+    </li>
     
     {% endif %}
     <hr>
     <a href="{% url 'account:logout' %}" class="btn btn-danger fw-bold w-100">Sign out <i class="fa-solid fa-right-from-bracket ms-4"></i></a>
+    <hr>
+    <li><div id="google_translate_element"></div></li>
 </ul>

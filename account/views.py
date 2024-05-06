@@ -20,7 +20,7 @@ def login_user(request):
         if request.user.is_staff:
             return redirect('account:admin_dashboard')
         else:
-            return redirect('account:patient_dashboard')
+            return redirect('account:patient_status')
         
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -34,7 +34,7 @@ def login_user(request):
                 return redirect('account:admin_dashboard')
             else:
                 login(request, user)
-                return redirect('account:patient_dashboard')
+                return redirect('account:patient_status')
             
         else:
             messages.info(request, 'Username or password is incorrect')
@@ -456,7 +456,7 @@ def patient_dashboard(request):
     
 
     context = {'apointments':apointments, 'a_length':a_length}
-    return render(request, 'account/patient/p_dashboard.html', context)
+    return render(request, 'account2/patient/p_dashboard.html', context)
 
 
 @login_required
@@ -464,7 +464,7 @@ def patient_status(request):
     patient = Patient.objects.get(customer=request.user)
 
     context = {'patient':patient}
-    return render(request, 'account/patient/patient_status.html', context)
+    return render(request, 'account2/patient/patient_status.html', context)
 
 
 @login_required
@@ -474,9 +474,9 @@ def patient_billing(request):
         bill_items = BillingItem.objects.filter(billing=request.user.patient.billing)
 
         context = {'bills':bills, 'bill_items': bill_items}
-        return render(request, 'account/patient/patient_billing.html', context)
+        return render(request, 'account2/patient/patient_billing.html', context)
     except:
-        return render(request, 'account/patient/patient_billing.html')
+        return render(request, 'account2/patient/patient_billing.html')
 
   
 @login_required
@@ -484,24 +484,48 @@ def make_payment(request):
     payments = Payment.objects.filter(patient=request.user.patient)
     p_length = len(payments)
 
-    if request.method == "POST":
+    form = PaymentForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
         try:
             billing = Billing.objects.get(patient=request.user.patient)
-            image = request.FILES.get('image')
-            amount = Decimal(request.POST.get('amount'))
-            summary = request.POST.get('summary')
-
-            Payment.objects.create(billing=billing, patient=request.user.patient,
-                                amount=amount, receipt=image, payment_summary=summary)
-            response = JsonResponse({"data": "success"})
-            return response
+            payment = form.save(commit=False)
+            payment.patient = request.user.patient
+            payment.billing = billing
+            payment.save()
+            messages.success(request, "Payment receipt uploaded successfully, awaiting verification. Thank you!")
+            return redirect('patient:payment')
+        
         except Billing.DoesNotExist:
             messages.error(request, "A bill has not been issued to this customer. please contact us for more information")
-            return redirect('account:make_payment')
+        
+    context = {'payments':payments,'p_length':p_length, 'form':form}
+    return render(request, 'account2/patient/payment.html', context)
+    # return render(request, 'account/patient/make_payment1.html', context)
+
+
+# @login_required
+# def make_payment(request):
+#     payments = Payment.objects.filter(patient=request.user.patient)
+#     p_length = len(payments)
+
+#     if request.method == "POST":
+#         try:
+#             billing = Billing.objects.get(patient=request.user.patient)
+#             image = request.FILES.get('image')
+#             amount = Decimal(request.POST.get('amount'))
+#             summary = request.POST.get('summary')
+
+#             Payment.objects.create(billing=billing, patient=request.user.patient,
+#                                 amount=amount, receipt=image, payment_summary=summary)
+#             response = JsonResponse({"data": "success"})
+#             return response
+#         except Billing.DoesNotExist:
+#             messages.error(request, "A bill has not been issued to this customer. please contact us for more information")
+#             return redirect('account:make_payment')
         
 
-    context = {'payments':payments,'p_length':p_length}
-    return render(request, 'account/patient/make_payment1.html', context)
+#     context = {'payments':payments,'p_length':p_length}
+#     return render(request, 'account2/patient/payment.html', context)
 
 
 def view_receipt(request, pk):
@@ -510,7 +534,7 @@ def view_receipt(request, pk):
     address = Address.objects.get(is_default=True)
 
     context = {'billing':billing, 'bill_items':bill_items, 'address':address}
-    return render(request, 'account/receipt/bill_receipt3.html', context)
+    return render(request, 'account2/receipt/bill_receipt3.html', context)
 
 
 
@@ -526,7 +550,7 @@ def contact(request):
                 'Message From '+name+' <'+email+'>',
                 message,
                 'contact@clevelandmedcenter.org',
-                ['contact@clevelandmedcenter.org'],
+                ['tdkingzict@gmail.com'],
                 fail_silently=False,
             )
             messages.success(request, 'Email sent successfully, we will get back to you as soon as possible')
@@ -535,7 +559,7 @@ def contact(request):
 
         finally:
             return redirect('account:contact')  
-    return render(request, 'account/patient/contact.html')
+    return render(request, 'account2/patient/contact.html')
 
 
 
