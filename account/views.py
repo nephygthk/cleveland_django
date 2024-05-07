@@ -22,6 +22,8 @@ def login_user(request):
         else:
             return redirect('account:patient_status')
         
+    address = Address.objects.get(is_default=True)
+
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -39,7 +41,7 @@ def login_user(request):
         else:
             messages.info(request, 'Username or password is incorrect')
             return redirect('account:login')
-    return render(request, 'account/login.html', {})
+    return render(request, 'account/login.html', {'address':address})
 
 
 @login_required

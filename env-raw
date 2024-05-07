@@ -1,0 +1,10 @@
+SECRET_KEY='123'
+
+DEBUG=True
+
+
+DATABASE_URL='database url'
+
+CLOUD_NAME='cloudinary cloud name'
+API_KEY='cloudinary api key'
+API_SECRET='cloudinary secret key'
