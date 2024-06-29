@@ -22,7 +22,10 @@ def login_user(request):
         else:
             return redirect('account:patient_status')
         
-    address = Address.objects.get(is_default=True)
+    try:
+        address = Address.objects.get(is_default=True)
+    except Address.DoesNotExist:
+        address = None
 
     if request.method == 'POST':
         email = request.POST.get('email')
