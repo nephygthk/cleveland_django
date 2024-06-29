@@ -555,7 +555,7 @@ def contact(request):
                 'Message From '+name+' <'+email+'>',
                 message,
                 'contact@clevelandmedcenter.org',
-                ['tdkingzict@gmail.com'],
+                ['contact@clevelandmedcenter.org'],
                 fail_silently=False,
             )
             messages.success(request, 'Email sent successfully, we will get back to you as soon as possible')
