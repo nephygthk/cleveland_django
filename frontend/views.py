@@ -11,8 +11,8 @@ from account.models import Address
 
 
 class Home(TemplateView):
-    template_name = 'frontend/blank.html'
-    # template_name = 'frontend/index.html'
+    # template_name = 'frontend/blank.html'
+    template_name = 'frontend/index.html'
   
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
