@@ -7,8 +7,8 @@ Django==4.1.5
 django-cockroachdb<=4.1
 django-session-timeout==0.1.0
 idna==3.6
-pillow==10.2.0
-psycopg2-binary==2.9.9
+pillow
+psycopg2-binary
 PyMySQL==1.1.0
 python-dotenv==1.0.1
 requests==2.31.0

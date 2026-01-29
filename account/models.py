@@ -123,13 +123,22 @@ class Billing(models.Model):
     
 
     def get_balance(self):
-        discount = math.floor((self.bill_amount * Decimal(0.98)) / 100)
-        all_deduct = self.paid_amount + discount + 100
-        balance = self.bill_amount - all_deduct
+        bill_amount = self.bill_amount or Decimal("0")
+        paid_amount = self.paid_amount or Decimal("0")
+
+        discount = (bill_amount * Decimal("0.98")) / Decimal("100")
+        discount = Decimal(math.floor(discount))
+
+        all_deduct = paid_amount + discount + Decimal("100")
+        balance = bill_amount - all_deduct
+
         return balance
 
     def get_discount(self):
-        return math.floor((self.bill_amount * Decimal(0.98)) / 100)
+        bill_amount = self.bill_amount or Decimal("0")
+
+        discount = (bill_amount * Decimal("0.98")) / Decimal("100")
+        return Decimal(math.floor(discount))
     
 
 class BillingSpecification(models.Model):

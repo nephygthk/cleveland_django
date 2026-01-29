@@ -142,7 +142,9 @@
                 <div class="row pt-md-2 pt-1 text-white">
                     <div class="col-7 col-md-8">
                         <img id="logo" src="{% static 'images/logof.jpg' %}" alt="" >
+                        {% if address %}
                         <p class="small">Cleveland Medical Center, {{address.city}}, <br> {{address.country}}</p>
+                        {% endif %}
                     </div>
                     <div class="col-5 col-md-4 pt-md-5 pt-3">
                         

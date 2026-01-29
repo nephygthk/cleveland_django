@@ -244,20 +244,29 @@ def edit_billing(request, pk):
     form = BillingForm(request.POST or None, instance=billing)
     formset = EditBillingItemFormSet(request.POST or None, queryset=billing_item)
 
-    if all([form.is_valid(), formset.is_valid()]):
+    if form.is_valid() and formset.is_valid():
         prices = []
+
         parent = form.save()
-        # child = formset.save()
-        for form in formset:
-            child = form.save(commit=False)
+
+        for f in formset:
+            if not f.cleaned_data:
+                continue
+
+            bill_value = f.cleaned_data.get("bill_value") or 0
+            bill_qty = f.cleaned_data.get("bill_qty") or 0
+
+            child = f.save(commit=False)
             child.billing = parent
             child.save()
-            prices.append(int(child.bill_value) * (int(child.bill_qty)))
-        parent.bill_amount = sum(Decimal(price)  for price in prices)
+
+            prices.append(Decimal(bill_value) * Decimal(bill_qty))
+
+        parent.bill_amount = sum(prices, Decimal("0"))
         parent.save()
 
-        messages.success(request, 'The bill was updated successfully')
-        return redirect('account:all_billings')
+        messages.success(request, "The bill was updated successfully")
+        return redirect("account:all_billings")
 
     context = {'billing_form':form, 'bill_item_form':formset}
     return render(request, "account2/admin/edit_billing.html", context)
