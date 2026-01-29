@@ -12,7 +12,6 @@
     }
   ],
   "routes": [
-    { "src": "/static/(.*)", "dest": "/staticfiles_build/$1" },
     { "src": "/(.*)", "dest": "clevhospital/wsgi.py" }
   ]
 }
