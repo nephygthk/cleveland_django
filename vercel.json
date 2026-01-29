@@ -6,27 +6,13 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
-      }
-    },
-    {
-      "src": "build_files.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles_build"
+        "runtime": "python3.9",
+        "installCommand": "python3.9 -m pip install --upgrade pip && pip install -r requirements.txt && python3.9 manage.py collectstatic --noinput"
       }
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "clevhospital/wsgi.py"
-    }
+    { "src": "/static/(.*)", "dest": "/static/$1" },
+    { "src": "/(.*)", "dest": "clevhospital/wsgi.py" }
   ]
-    
 }
-
